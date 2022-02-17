@@ -1,49 +1,54 @@
 #!/bin/bash
 
-touch temp
-touch temp2
-touch temp3
+touch methodRef
+touch classAndFunctionRef
+touch className
+touch functionName
+touch out
 touch constantPool
 
-javap -c -p -v $1 | grep -P "^[ ]*#[0-9]* = " > constantPool
-javap -p $1 | grep invokevirtual | grep -oP "#\d+" > temp
+javap -c -p -v $1 | grep -P "^[ ]*#\d* = " > constantPool
+javap -c -p $1 | grep invokevirtual | grep -oP "#\d+" | sort -u > methodRef
 
-for var in $(cat temp)
+for var in $(cat methodRef)
 do
-    cat constantPool | grep -P "^[ ]*$var = " | grep -oP '#\d+.#\d+' | tr "." "\n" >> temp2
+    cat constantPool | grep -P "^[ ]*$var = " | grep -oP '#\d+.#\d+' | tr "." "\n" >> classAndFunctionRef
 done
 
-sort -u temp2 > temp
-cat /dev/null >  temp2
+sort -u classAndFunctionRef > out
+cat out > classAndFunctionRef
+cat /dev/null > out
 
-for var in $(cat temp)
+for var in $(cat classAndFunctionRef)
 do
-    cat constantPool | grep -P "^[ ]*$var = " | grep Class | sed -r 's/[ ]*#[0-9]* = Class[ ]*(#[0-9]+).*/\1/' >> temp2
+    cat constantPool | grep -P "^[ ]*$var = " | grep Class | sed -r 's/[ ]*#[0-9]* = Class[ ]*(#[0-9]+).*/\1/' >> className
+    cat constantPool | grep -P "^[ ]*$var = " | grep NameAndType | grep -oP '#\d+:#\d+' | tr ":" "\n" >> functionName
 done
 
-for var in $(cat temp2)
+sed '1d; n; d' -i functionName
+
+sort -u className > out
+cat out > className
+sort -u functionName > out
+cat out > functionName
+cat /dev/null > out
+
+for var in $(cat className)
 do
-    cat constantPool | grep -P "^[ ]*$var = " | sed -r 's/[ ]*#[0-9]* = Utf8[ ]*([^ ]+).*/\1/' >> temp3
+    cat constantPool | grep -P "^[ ]*$var = " | sed -r 's/[ ]*#[0-9]* = Utf8[ ]*([^ ]+).*/\1/' >> out
 done
 
-cat /dev/null >  temp2
-
-for var in $(cat temp)
+for var in $(cat functionName)
 do
-    cat constantPool | grep -P "^[ ]*$var = " | grep NameAndType | grep -oP '#\d+:#\d+' | tr ":" "\n" >> temp2
+    cat constantPool | grep -P "^[ ]*$var = " | sed -r 's/[ ]*#[0-9]* = Utf8[ ]*([^ ]+).*/\1/' | sed -r 's/\((.*)\)[^L]/\1/' | sed -r 's/\((.*)\)(L.*;)/\2\1/' | tr ";" "\n" | grep -P "L.*" | sed -r 's/L(.*)/\1/' >> out
 done
 
-sed '1d; n; d' -i temp2
+cat out | sort -u
 
-for var in $(cat temp2)
-do
-    cat constantPool | grep -P "^[ ]*$var = " | sed -r 's/[ ]*#[0-9]* = Utf8[ ]*([^ ]+).*/\1/' | sed -r 's/\((.*)\)[^L]/\1/' | sed -r 's/\((.*)\)(L.*;)/\2\1/' | tr ";" "\n" | grep -P "L.*" | sed -r 's/L(.*)/\1/' >> temp3
-done
-
-cat temp3 | sort -u
-
+rm functionName
 rm constantPool
-rm temp2
-rm temp
-rm temp3
+rm classAndFunctionRef
+rm methodRef
+rm className
+rm out
 
