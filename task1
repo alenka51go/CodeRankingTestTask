@@ -1,0 +1,21 @@
+0000000000004ad0 <malloc@plt>:
+    4ad4:	f2 ff 25 ad c3 02 00 	bnd jmpq *0x2c3ad(%rip)        # 30e88 <malloc@GLIBC_2.2.5>
+   1b910:	e8 bb 91 fe ff       	callq  4ad0 <malloc@plt>
+   1be72:	e8 59 8c fe ff       	callq  4ad0 <malloc@plt>
+   1c795:	e8 36 83 fe ff       	callq  4ad0 <malloc@plt>
+   1ca45:	e8 86 80 fe ff       	callq  4ad0 <malloc@plt>
+   21ce2:	e8 e9 2d fe ff       	callq  4ad0 <malloc@plt>
+   21e08:	e8 c3 2c fe ff       	callq  4ad0 <malloc@plt>
+   21e28:	e8 a3 2c fe ff       	callq  4ad0 <malloc@plt>
+   21f64:	e8 67 2b fe ff       	callq  4ad0 <malloc@plt>
+   21faa:	e8 21 2b fe ff       	callq  4ad0 <malloc@plt>
+   22e03:	e8 c8 1c fe ff       	callq  4ad0 <malloc@plt>
+   23406:	e8 c5 16 fe ff       	callq  4ad0 <malloc@plt>
+   23991:	e8 3a 11 fe ff       	callq  4ad0 <malloc@plt>
+   23bdf:	e8 ec 0e fe ff       	callq  4ad0 <malloc@plt>
+   24089:	e8 42 0a fe ff       	callq  4ad0 <malloc@plt>
+   24133:	e8 98 09 fe ff       	callq  4ad0 <malloc@plt>
+   2424e:	e8 7d 08 fe ff       	callq  4ad0 <malloc@plt>
+   242cb:	e8 00 08 fe ff       	callq  4ad0 <malloc@plt>
+   24a3c:	e8 8f 00 fe ff       	callq  4ad0 <malloc@plt>
+   24ae6:	e8 e5 ff fd ff       	callq  4ad0 <malloc@plt>
